@@ -1,0 +1,10 @@
+---
+- name: Render validated configuration without connecting to devices
+  hosts: vyos
+  connection: local
+  gather_facts: false
+  vars:
+    ansible_connection: local
+    vyos_operation: render
+  roles:
+    - vyos_config

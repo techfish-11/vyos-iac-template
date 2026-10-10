@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+repo="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -x "$repo/src/.venv/bin/python" ]]; then
+    python_bin="$repo/src/.venv/bin/python"
+elif [[ -x "$repo/src/.venv-linux/bin/python" ]]; then
+    python_bin="$repo/src/.venv-linux/bin/python"
+else
+    python_bin="python3"
+fi
+export PYTHONPATH="$repo/src${PYTHONPATH:+:$PYTHONPATH}"
+exec "$python_bin" -m vyos_iac "$@"

@@ -1,0 +1,15 @@
+src/.venv/
+src/.venv-linux/
+src/.cache/
+src/.collections/
+src/.ansible/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+src/artifacts/*
+!src/artifacts/.gitkeep
+*.retry
+.vault-password*
+devices/*/secrets.local.yml
+*.pem
+*.key

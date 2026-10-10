@@ -1,0 +1,23 @@
+---
+all:
+  children:
+    vyos:
+      vars:
+        ansible_host: 192.0.2.1
+        ansible_user: automation
+        ansible_port: 22
+        ansible_connection: ansible.netcommon.network_cli
+        ansible_network_os: vyos.vyos.vyos
+        ansible_host_key_checking: true
+        ansible_host_key_auto_add: false
+        vyos_known_hosts: /tmp/not-used-for-render
+        vyos_commit_minutes: 10
+        vyos_management_interface: eth0
+        vyos_healthcheck_targets: [192.0.2.254]
+      hosts:
+        fixture14:
+          vyos_version: "1.4"
+          vyos_config_file: examples/1.4/config.boot
+        fixture15:
+          vyos_version: "1.5"
+          vyos_config_file: examples/1.5/config.boot

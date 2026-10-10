@@ -1,0 +1,10 @@
+---
+- name: Back up running and saved configurations
+  hosts: vyos
+  gather_facts: false
+  serial: 1
+  any_errors_fatal: true
+  vars:
+    vyos_operation: backup
+  roles:
+    - vyos_config

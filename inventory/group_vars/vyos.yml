@@ -1,0 +1,11 @@
+---
+ansible_connection: ansible.netcommon.network_cli
+ansible_network_os: vyos.vyos.vyos
+ansible_network_cli_ssh_type: paramiko
+ansible_user: automation
+ansible_port: 22
+ansible_host_key_checking: true
+ansible_host_key_auto_add: false
+ansible_persistent_log_messages: false
+vyos_known_hosts: "{{ lookup('ansible.builtin.env', 'HOME') }}/.ssh/known_hosts"
+vyos_commit_minutes: 10

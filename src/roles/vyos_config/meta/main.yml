@@ -1,0 +1,11 @@
+---
+galaxy_info:
+  role_name: vyos_config
+  author: techfish
+  description: Guarded full configuration replacement for VyOS
+  license: MIT
+  min_ansible_version: "2.19"
+  platforms:
+    - name: Debian
+      versions: [all]
+dependencies: []

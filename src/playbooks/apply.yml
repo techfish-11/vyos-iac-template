@@ -1,0 +1,10 @@
+---
+- name: Apply full configuration with commit-confirm and verification
+  hosts: vyos
+  gather_facts: false
+  serial: 1
+  any_errors_fatal: true
+  vars:
+    vyos_operation: apply
+  roles:
+    - vyos_config

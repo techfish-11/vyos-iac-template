@@ -1,0 +1,10 @@
+---
+- name: Review the remote candidate without changing running or saved configuration
+  hosts: vyos
+  gather_facts: false
+  serial: 1
+  any_errors_fatal: true
+  vars:
+    vyos_operation: plan
+  roles:
+    - vyos_config

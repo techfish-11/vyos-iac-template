@@ -1,0 +1,49 @@
+---
+- name: Validate operation and explicit deployment target
+  ansible.builtin.assert:
+    that:
+      - vyos_operation in ['render', 'plan', 'apply', 'backup', 'save']
+      - >-
+        vyos_operation not in ['apply', 'save'] or
+        (ansible_limit | default('') not in ['', 'all', '*', 'vyos'])
+    fail_msg: "apply/save requires --limit with explicit device names"
+
+- name: Execute guarded configuration operation
+  vyos_iac:
+    mode: "{{ vyos_operation }}"
+    device:
+      host: "{{ ansible_host }}"
+      user: "{{ ansible_user }}"
+      port: "{{ ansible_port }}"
+      version: "{{ vyos_version }}"
+      source: "{{ vyos_config_file | default('devices/' + inventory_hostname + '/config.boot') }}"
+      management_interface: "{{ vyos_management_interface }}"
+      secrets: {}
+      healthcheck_targets: "{{ vyos_healthcheck_targets }}"
+    known_hosts: "{{ vyos_known_hosts }}"
+    key_file: "{{ ansible_private_key_file | default(omit) }}"
+    minutes: "{{ vyos_commit_minutes }}"
+  register: vyos_config_operation_result
+  no_log: true
+  failed_when: false
+  changed_when: vyos_config_operation_result.changed | default(false)
+
+- name: Report safe transaction status
+  ansible.builtin.debug:
+    msg:
+      summary: "{{ vyos_config_operation_result.summary | default('設定を確認できませんでした。') }}"
+      next_step: "{{ vyos_config_operation_result.next_step | default('./vyos doctor を実行してください。') }}"
+      config_path: "{{ vyos_config_operation_result.config_path | default('none') }}"
+      phase: "{{ vyos_config_operation_result.phase | default('validation') }}"
+      state: "{{ vyos_config_operation_result.state | default('unchanged') }}"
+      reason: "{{ vyos_config_operation_result.reason | default('none') }}"
+      would_change: "{{ vyos_config_operation_result.would_change | default(false) }}"
+      artifact_path: "{{ vyos_config_operation_result.artifact_path | default('not_created') }}"
+      session_cleanup_failed: "{{ vyos_config_operation_result.session_cleanup_failed | default(false) }}"
+      artifact_cleanup_failed: "{{ vyos_config_operation_result.artifact_cleanup_failed | default(false) }}"
+
+- name: Stop on any transaction or cleanup failure
+  ansible.builtin.assert:
+    that:
+      - not (vyos_config_operation_result.operation_failed | default(true))
+    fail_msg: "Operation failed. Inspect the reported phase/state and docs/recovery.md."
