@@ -10,7 +10,7 @@ cffi==2.1.1
 click==8.5.0
 cryptography==50.0.2
 distro==1.9.0
-filelock==4.0.12
+filelock==4.2.1
 importlib_metadata==9.0.1
 iniconfig==2.3.1
 Jinja2==3.1.6
